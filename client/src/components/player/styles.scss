@@ -1,0 +1,44 @@
+.player {
+    width: 140px;
+    height: 64px;
+    padding: 4px;
+    background-color: #2E1F3E;
+    position: absolute;
+    color: white;
+    border-radius: 4px;
+    &-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        & img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        &-name {
+            font-size: 13px;
+        }
+
+        &-cash {
+            font-size: 13px;
+        }
+    }
+}
+
+@media (max-width: 1000px) {
+    .player {
+        width: 80px;
+        height: 44px;
+        padding: 2px;
+        &-header {
+            &-name {
+                font-size: 8px;
+            }
+            &-cash {
+                font-size: 8px;
+            }
+        }
+    }
+}

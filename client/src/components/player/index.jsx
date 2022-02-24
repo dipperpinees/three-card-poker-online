@@ -4,21 +4,10 @@ import Cards from '../cards';
 import "./styles.scss";
 import {isMobile} from 'react-device-detect';
 
-function Player({isYou, index, name, cash, cashSended, isOpened, cards, isMaster, onSend, socketId}) {
+function Player({player, isYou, onSend, onPut}) {
+    const {isMaster, socketId, cash, isOpened, cards, cashSended, name, pos, avatar, cashOther} = player;
     if(isYou) {
         localStorage.setItem("cash2", cash);
-    }
-    
-    const handleBorder = () => {
-        if(isYou) {
-            return "2px solid #F7C600";
-        }
-
-        if(isMaster) {
-            return "2px solid #F70000"
-        }
-
-        return "2px solid #9880E9";
     }
     const handlePosPc = (index) => {
         switch(index) {
@@ -109,14 +98,32 @@ function Player({isYou, index, name, cash, cashSended, isOpened, cards, isMaster
         }
     }
 
+    const handlePut = () => {
+        let money = prompt("Số tiền muốn đặt nhờ " + name, 0);
+
+        if (Number(money) >= 1000) {
+            onPut(socketId, Number(money));
+        }
+    }
+
     return (
-        <div className='player' style={{...handlePos(isMobile, index), border:  handleBorder()}} onClick={!isYou && handleSend}>
+        <div className='player' 
+            style={{...handlePos(isMobile, pos), border: isYou ? "2px solid #F7C600" : "2px solid #9880E9", backgroundColor: isYou ? "#125413" : "#2E1F3E"}} 
+        >
             <div className='player-header'>
-                <p className='player-header-name'>{name} {isMaster && "(nhà cái)"}</p>
-                <p className='player-header-cash'>{formatMoney(cash)}đ</p>
-                {!isMaster && <p className='player-header-cash'>Đặt: {formatMoney(cashSended)}đ</p>}
+                <div className='player-header-info'>
+                    <div className='player-header-avatar'>
+                        <img src={avatar} alt="avatar" />
+                    </div>
+                    <div>
+                        <p className='player-header-name'>{name}</p>
+                        <p className='player-header-cash' onClick={!isYou && handleSend}>{formatMoney(cash)}đ</p>
+                    </div>
+                </div>
+                {!isMaster && <p className='player-header-cash' onClick={!isYou && !isMaster && handlePut}>Đặt: {formatMoney(cashSended + cashOther)}đ</p>}
             </div>
-            {isOpened && <Cards pos={handlePosCard(index)} cards={cards}/>}
+            {isOpened && <Cards pos={handlePosCard(pos)} cards={cards}/>}
+            {isMaster && <div className="player-master">👑</div>}
         </div>
     );
 }

@@ -12,3 +12,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser (s
 <p align="center">
   <img width="550" src="https://i.ibb.co/PN57jPM/Screenshot-20220221-085402.png"/>
 </p>
+
+### Update
+  - Fix bug
+  - Thêm avatar
+  - Reset tiền ko cần xóa cookies
+  - Thêm âm thanh khi ra điểm 1
+  - Đặt tiền nhờ nhà khác

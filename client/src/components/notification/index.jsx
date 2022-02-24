@@ -6,7 +6,7 @@ import cashSound from '../../assets/sound/cashsound.mp3';
 function Toastify({socket}) {
     const [cashAudio] = useState(new Audio(cashSound));
     useEffect(() => {
-        socket.on("log", ({type, message}) => {
+        socket.on("alert", ({type, message}) => {
             if(type === "win") {
                 cashAudio.play();
             }

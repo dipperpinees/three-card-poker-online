@@ -3,7 +3,7 @@ import JoinBox from '../joinbox';
 import Player from '../player';
 import "./styles.scss";
 
-function Board({onConnect, socket}) {
+function Board({onShowJoinForm, socket}) {
     const [listPlayer, setListPlayer] = useState([]);
     useEffect(() => {
         if(!socket) {
@@ -18,21 +18,26 @@ function Board({onConnect, socket}) {
     }, [socket])
     
     const handleConnect = (index) => {
-        if(localStorage.getItem("name")) {
-            onConnect(index, localStorage.getItem("name"));
-            return;
-        }
-        let name = prompt("Nhập tên của bạn", "");
-        if (name.length !== 0) {
-            onConnect(index, name);
-            localStorage.setItem("name", name);
-        } else {
-            alert("Tên trống")
-        }
+        // if(localStorage.getItem("name")) {
+        //     onConnect(index, localStorage.getItem("name"));
+        //     return;
+        // }
+        // let name = prompt("Nhập tên của bạn", "");
+        // if (name.length !== 0) {
+        //     onConnect(index, name);
+        //     localStorage.setItem("name", name);
+        // } else {
+        //     alert("Tên trống")
+        // }
+        onShowJoinForm(index);
     }
 
     const handleSendMoney = (recipientId, recipientCash) => {
         socket.emit('sendother', {recipientId, recipientCash});
+    }
+
+    const handlePutCash = (putId, putCash) => {
+        socket.emit('putother', {putId, putCash});
     }
 
     return (
@@ -40,10 +45,10 @@ function Board({onConnect, socket}) {
             {[...Array(12)].map((x, i) => (
                 <JoinBox key={i} index={i+1} onConnect={handleConnect}/>
             ))}
-            {listPlayer.map(({socketId, pos, name, cash, cashSended, isOpened, cards, isMaster}, index) => (
-                <Player isYou={socket.id === socketId} key={index} index={pos} isMaster={isMaster} name={name} cash={cash} cashSended={cashSended} cards={cards} isOpened={isOpened} onSend={handleSendMoney} socketId={socketId}/>
+            {listPlayer.map((player, index) => (
+                <Player isYou={socket.id === player.socketId} key={index} player={player} onSend={handleSendMoney} onPut={handlePutCash}/>
             ))}
-            <img src={require("../../assets/img/poker-chips.png")} alt="" />
+            <img src={require("../../assets/img/poker-chips.png")} alt="icon" />
         </div>
     );
 }

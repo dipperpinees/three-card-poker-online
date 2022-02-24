@@ -24,9 +24,6 @@ function CashInput({socket, isMaster}) {
                     ))}
                     <option value={10000}>15000đ</option>
                     <option value={20000}>20000đ</option>
-                    <option value={30000}>30000đ</option>
-                    <option value={40000}>40000đ</option>
-                    <option value={50000}>50000đ</option>
                 </select>
     
             </div>

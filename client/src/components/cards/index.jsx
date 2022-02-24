@@ -10,7 +10,7 @@ function Cards({pos, cards}) {
                 return {top: -56}
             }
             case "bottom": {
-                return {bottom: -56}
+                return {bottom: -60}
             }
             case "left": {
                 return {left: -124, top: 0}
@@ -43,7 +43,9 @@ function Cards({pos, cards}) {
             {cards?.cards?.map((card, index) => (
                 <img key={index} src={handleCardImage(card.point, card.type)} alt="card" />
             ))}
-            <span>{Number(cards.point1) === 11 ? "sáp" : `${cards.point1}đ`}</span>
+            {Number(cards.point1) === 11 && <span style={{color: "#DC0024"}}>sáp</span >}
+            {Number(cards.point1) === 10 && <span style={{color: "#3A94D5"}}>10đ</span>}
+            {Number(cards.point1) < 10 && <span style={{color: "#000"}}>{cards.point1}đ</span>}
         </div>
     );
 }

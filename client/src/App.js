@@ -10,11 +10,14 @@ import MasterSettings from './components/mastersettings';
 import Toastify from './components/notification';
 // import sound from './assets/sound/bgsound.mp3';
 import {isMobile} from 'react-device-detect';
+import JoinForm from './components/joinform';
 
 const socket = io("http://localhost:8021/");
 
 function App(props) {
     // const [audio] = useState(new Audio(sound));
+    const [showJoinForm, setShowJoinForm] = useState(false);
+    const [pos, setPos] = useState();
     const toggleFullSceen = () => {
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen();
@@ -38,15 +41,25 @@ function App(props) {
             }
             setIsMaster(args.isMaster);
             setIsJoin(true);
-            localStorage.setItem("id", args.playerd);
         })
         socket.on("newmaster", () => {
             setIsMaster(true);
         })
     }, [])
 
-    const connectSocket = async (index, name) => {
-        socket.emit("join", {name: name, pos: index, cash: Number(localStorage.getItem("cash2"))})
+    const connectSocket = async (name, avatar) => {
+        setShowJoinForm(false);
+        socket.emit("join", {name: name, pos: pos, cash: Number(localStorage.getItem("cash2")), avatar: avatar})
+        localStorage.setItem("name", name);
+        localStorage.setItem("avatar", avatar);
+    }   
+    const openJoinForm = (pos) => {
+        setPos(pos);
+        if(!isJoin) {
+            setShowJoinForm(true);
+        } else {
+            socket.emit("join", {pos: pos});
+        }
     }
 
     const cancelMaster = () => {
@@ -55,7 +68,7 @@ function App(props) {
     
     return (
         <div className='App'>
-            <Board onConnect={connectSocket} socket={socket}/>
+            <Board onShowJoinForm={openJoinForm} socket={socket}/>
             <OpenCard socket={socket}/>
             {!isMaster && isJoin && <CashInput socket={socket}/>}
             {isMaster && <Control socket={socket}/>}
@@ -63,6 +76,7 @@ function App(props) {
             <Modal socket={socket} onCancelMaster={cancelMaster}/>
             <Toastify socket={socket} />
             {isMobile && <img className="fullscreen" src="https://img.icons8.com/material-outlined/24/000000/full-screen--v1.png" onClick={() => toggleFullSceen()} alt="fullscreen"/>}
+            {showJoinForm && <JoinForm onConnect={connectSocket} onClose={() => setShowJoinForm(false)}/>}
         </div>
     );
 }

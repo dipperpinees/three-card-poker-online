@@ -21,10 +21,10 @@ function MasterSettings({socket, isMaster}) {
     return (
         <div className='master-settings'>
         {showSettings && isMaster && <div className='master-settings-input'>
-            <input type="number" placeholder='Số tiền đặt tối đa' ref={inputRef}/>
+            <input type="number" placeholder='Tiền đặt tối đa' ref={inputRef}/>
             <button onClick={() => socket.emit("maxcash", inputRef.current.value)}>Đặt</button>
         </div>}
-        <h5>Số tiền đặt tối đa: {formatMoney(maxCash)}đ</h5>
+        <h5>Tối đa: {formatMoney(maxCash)}đ</h5>
         </div>
     );
 }

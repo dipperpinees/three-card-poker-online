@@ -1,9 +1,8 @@
 .master-settings {
     position: fixed;
-    top: 4px;
-    left: 4px;
+    top: 8px;
+    left: 8px;
     display: flex;
-    align-items: center;
     flex-direction: column;
     &-input {     
         & input {

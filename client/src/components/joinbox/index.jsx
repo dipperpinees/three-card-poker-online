@@ -68,9 +68,7 @@ function JoinBox({index, onConnect}) {
     }
     return (
         <div className='joinbox' style={handlePos(isMobile, index)} onClick={() => onConnect(index)}>
-            <div>
-                +
-            </div>
+            <div>+</div>
         </div>
     );
 }

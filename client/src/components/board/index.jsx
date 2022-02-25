@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import JoinBox from '../joinbox';
 import Player from '../player';
+import SendCash from '../sendcash';
 import "./styles.scss";
 
 function Board({onShowJoinForm, socket}) {
     const [listPlayer, setListPlayer] = useState([]);
+    const [sendId, setSendId] = useState();
+    const [message, setMessage] = useState();
+    const [showForm, setShowForm] = useState();
+    const [formType, setFormType] = useState(); 
+
     useEffect(() => {
         if(!socket) {
             return;
@@ -32,12 +38,27 @@ function Board({onShowJoinForm, socket}) {
         onShowJoinForm(index);
     }
 
-    const handleSendMoney = (recipientId, recipientCash) => {
-        socket.emit('sendother', {recipientId, recipientCash});
+    const handleShowForm = (recipientId, name, type) => {
+        if(type === 'send') {
+            setSendId(recipientId);
+            setMessage("Số tiền bạn muốn tặng cho " + name);
+            setFormType("send");
+            setShowForm(true);
+        } else {
+            setSendId(recipientId);
+            setMessage("Số tiền bạn muốn đặt nhờ " + name);
+            setFormType("put");
+            setShowForm(true);
+        }
+        // socket.emit('sendother', {recipientId, recipientCash});
     }
 
-    const handlePutCash = (putId, putCash) => {
-        socket.emit('putother', {putId, putCash});
+    const handleSendCash = (recipientCash) => {
+        socket.emit('sendother', {recipientId: sendId, recipientCash: Number(recipientCash)});
+    }
+
+    const handlePutCash = (putCash) => {
+        socket.emit('putother', {putId: sendId, putCash: Number(putCash)});
     }
 
     return (
@@ -46,9 +67,10 @@ function Board({onShowJoinForm, socket}) {
                 <JoinBox key={i} index={i+1} onConnect={handleConnect}/>
             ))}
             {listPlayer.map((player, index) => (
-                <Player isYou={socket.id === player.socketId} key={index} player={player} onSend={handleSendMoney} onPut={handlePutCash}/>
+                <Player isYou={socket.id === player.socketId} key={index} player={player} onShowForm={handleShowForm}/>
             ))}
             <img src={require("../../assets/img/poker-chips.png")} alt="icon" />
+            {showForm && <SendCash onClose={() => setShowForm(false)} onSubmit={formType === 'send' ? handleSendCash : handlePutCash} title={message}/>}
         </div>
     );
 }

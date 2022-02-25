@@ -4,7 +4,7 @@ import Cards from '../cards';
 import "./styles.scss";
 import {isMobile} from 'react-device-detect';
 
-function Player({player, isYou, onSend, onPut}) {
+function Player({player, isYou, onShowForm}) {
     const {isMaster, socketId, cash, isOpened, cards, cashSended, name, pos, avatar, cashOther} = player;
     if(isYou) {
         localStorage.setItem("cash2", cash);
@@ -91,19 +91,11 @@ function Player({player, isYou, onSend, onPut}) {
     }
 
     const handleSend = () => {
-        let money = prompt("Số tiền muốn tặng cho " + name, 0);
-
-        if (Number(money) >= 1000) {
-            onSend(socketId, Number(money));
-        }
+        onShowForm(socketId, name, "send");
     }
 
     const handlePut = () => {
-        let money = prompt("Số tiền muốn đặt nhờ " + name, 0);
-
-        if (Number(money) >= 1000) {
-            onPut(socketId, Number(money));
-        }
+        onShowForm(socketId, name, "put");
     }
 
     return (
@@ -124,6 +116,7 @@ function Player({player, isYou, onSend, onPut}) {
             </div>
             {isOpened && <Cards pos={handlePosCard(pos)} cards={cards}/>}
             {isMaster && <div className="player-master">👑</div>}
+            
         </div>
     );
 }

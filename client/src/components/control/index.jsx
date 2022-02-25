@@ -3,16 +3,39 @@ import "./styles.scss";
 
 function Control({socket}) {
     const [showControl, setShowControl] = useState("start");
+    const [count, setCount] = useState(6);
     useEffect(() => {
         socket.on("newturn", () => {
             setShowControl("newturn");
         })
     }, [socket])
     
+    useEffect(() => {
+        if(count > 0) {
+            setTimeout(() => {
+                setCount(count - 1);
+            }, 1000)
+        }
+    }, [count])
+
+    const handleNewGame = () => {
+        socket.emit("reset"); 
+        setShowControl("start");
+        setCount(6);
+    }
+
+    const handleStart = () => {
+        if(count > 0) {
+            return;
+        }
+        socket.emit("start"); 
+        setShowControl(false);
+    }
+
     return (
         <div className="control">
-            {showControl === "start" && <button onClick={() => {socket.emit("start"); setShowControl(false)}}>Chia bài</button>}
-            {showControl === "newturn" && <button onClick={() => {socket.emit("reset"); setShowControl("start")}}>Ván mới</button>}
+            {showControl === "start" && <button onClick={handleStart}>Chia bài {count > 0 && `(${count})`}</button>}
+            {showControl === "newturn" && <button onClick={handleNewGame}>Ván mới </button>}
         </div>
     );
 }

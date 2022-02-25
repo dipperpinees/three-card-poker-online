@@ -42,24 +42,42 @@ const dealingCard = (numPlayer) => {
         listCard.push({point: i, type: "tep"});
         listCard.push({point: i, type: "bich"});
     }
-    for(let i = 0; i<numPlayer; i++) {
-        const threeCards = {
-            point1: 0,
-            point2: 0,
-            cards: []
-        };
-        for(let i = 0; i<3; i++) {
+    for(let i = 1; i<=3; i++) {
+        for(let j = 0; j<numPlayer; j++) {
+            if(i === 1) {
+                dealedCard[j] = {
+                    point1: 0,
+                    point2: 0,
+                    cards: []
+                }
+            }
             const randomNumber = Math.floor(Math.random() * listCard.length);
-            threeCards.cards.push(listCard[randomNumber]);
+            dealedCard[j].cards.push(listCard[randomNumber]);
             listCard.splice(randomNumber, 1);
+            if(i === 3) {
+                const {point1, point2} = calculatePoint(dealedCard[j].cards);
+                dealedCard[j].point1 = point1;
+                dealedCard[j].point2 = point2;
+            }
         }
-        const {point1, point2} = calculatePoint(threeCards.cards);
-        threeCards.point1 = point1;
-        threeCards.point2 = point2;
-        dealedCard.push(threeCards);
     }
     shuffleArray(dealedCard);
     return dealedCard;
 } 
+
+    // for(let i = 0; i<numPlayer; i++) {
+    //     const threeCards = {
+            
+    //     };
+    //     for(let i = 0; i<3; i++) {
+    //         const randomNumber = Math.floor(Math.random() * listCard.length);
+    //         threeCards.cards.push(listCard[randomNumber]);
+    //         listCard.splice(randomNumber, 1);
+    //     }
+    //     const {point1, point2} = calculatePoint(threeCards.cards);
+    //     threeCards.point1 = point1;
+    //     threeCards.point2 = point2;
+    //     dealedCard.push(threeCards);
+    // }
 
 module.exports = {dealingCard};

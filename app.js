@@ -121,17 +121,20 @@ io.on('connection', (socket) => {
     })
 
     socket.on('putother', ({putId, putCash}) => {
+        if(putCash < 1000) {
+            socket.emit('alert', {message: 'Lỗi! Số tiền tối thiểu 1000đ'})
+            return;
+        }
         if(isPlayed) {
             socket.emit('alert', {message: 'Lỗi! Game đã bắt đầu'})
             return;
         }
 
-        if(mapPlayer[socket.id].putOther.length > 0) {
-            socket.emit('alert', {message: 'Chỉ được đặt nhờ 1 nhà'})
+        if(mapPlayer[socket.id].putOther.length > 1) {
+            socket.emit('alert', {message: 'Chỉ được đặt nhờ tối đa 2 nhà'})
             return;
         }
-
-        if(mapPlayer?.[putId].cashSended + mapPlayer?.[putId].cashOther  + Number(putCash) > maxCash) {
+        if(mapPlayer?.[putId].cashSended + mapPlayer?.[putId].cashOther  + putCash > maxCash) {
             socket.emit('alert', {message: 'Người được gửi số tiền đặt vượt quá giới hạn'})
             return;
         }
@@ -139,26 +142,12 @@ io.on('connection', (socket) => {
         if(socket.id === master?.socketId) {
             return;
         }
-        mapPlayer[putId].cashOther += Number(putCash);
+        mapPlayer[putId].cashOther += putCash;
         mapPlayer[socket.id].putOther.push({putId, putCash});
         io.to(putId).emit("alert", {message: `${mapPlayer[socket.id].name} đặt nhờ ${putCash}`});
         io.sockets.emit('update', listPlayer);
         socket.emit("alert", {message: "Đặt nhờ thành công"})
     })
-
-    const handleCheckOpenFullCard = (listPlayer, master) => {
-        for(let i = 0; i<listPlayer.length; i++) {
-            if(!listPlayer[i].isOpened) {
-                return;
-            }
-        }
-        handleEndTurn(listPlayer, master);
-        io.sockets.emit('update', listPlayer);
-
-        setTimeout(() => {
-            io.to(master?.socketId).emit('newturn')
-        }, 4000)
-    }
 
     socket.on('opencard', () => {
         mapPlayer[socket.id].isOpened = true;
@@ -198,7 +187,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('sendother', ({recipientId, recipientCash}) => {
-        if(mapPlayer[socket.id].cash < Number(recipientCash)) {
+        if(Number(recipientCash) < 1000) {
             socket.emit('sendother', 'fail')
             return;
         }
@@ -277,11 +266,16 @@ const handleEndTurn = (listPlayer, master) => {
     sendCashMessage(master.socketId, masterCash > 0 && "win", masterCash);
 }
 
-// const resetPlayer = (listPlayer) => {
-//     for(let i = 0; i<listPlayer.length; i++) {
-//         listPlayer[i].cards = [];
-//         listPlayer[i].isOpened = false;
-//         listPlayer[i].cashOther = 0;
-//         listPlayer[i].putOther = [];
-//     }
-// }
+const handleCheckOpenFullCard = (listPlayer, master) => {
+    for(let i = 0; i<listPlayer.length; i++) {
+        if(!listPlayer[i].isOpened) {
+            return;
+        }
+    }
+    handleEndTurn(listPlayer, master);
+    io.sockets.emit('update', listPlayer);
+
+    setTimeout(() => {
+        io.to(master?.socketId).emit('newturn')
+    }, 2000)
+}

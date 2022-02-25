@@ -12,7 +12,7 @@ import Toastify from './components/notification';
 import {isMobile} from 'react-device-detect';
 import JoinForm from './components/joinform';
 
-const socket = io("http://localhost:8021/");
+const socket = io(process.env.REACT_APP_API_ENDPOINT);
 
 function App(props) {
     // const [audio] = useState(new Audio(sound));

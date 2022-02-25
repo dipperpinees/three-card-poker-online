@@ -2,13 +2,13 @@ const express = require("express");
 const app = express();
 const {dealingCard} = require("./card");
 const server = require("http").Server(app);
-require('dotenv').config()
+require('dotenv').config();
+const Player = require("./player");
 const io = require("socket.io")(server, {
     cors: {
       origin: '*',
     }
 });
-
 server.listen(process.env.PORT || 8021);
 
 let isPlayed = false;
@@ -43,19 +43,7 @@ io.on('connection', (socket) => {
             return;
         }
 
-        const thisPlayer = {
-            name: name,
-            cash: Number(cash) || 0,
-            socketId: socket.id,
-            cashSended: 1000,
-            isOpened: false,
-            cards: [],
-            pos: pos,
-            avatar: avatar || "https://cdn-icons-png.flaticon.com/512/3004/3004163.png",
-            cashOther: 0,
-            putOther: [],
-            isMaster: listPlayer.length === 0 ? true : false,
-        }
+        const thisPlayer = new Player(name, pos, Number(cash) || 0, avatar, socket.id, listPlayer.length === 0)
 
         if(thisPlayer.isMaster) {
             master = thisPlayer;
@@ -72,12 +60,9 @@ io.on('connection', (socket) => {
 
     socket.on('reset', (args) => {
 	    isPlayed = false;
-        for(let i = 0; i<listPlayer.length; i++) {
-            listPlayer[i].cards = [];
-            listPlayer[i].isOpened = false;
-            listPlayer[i].cashOther = 0;
-            listPlayer[i].putOther = [];
-        }
+        listPlayer.forEach((player) => {
+            player.reset();
+        })
         io.sockets.emit('update', listPlayer);
         io.to(master.socketId).emit('start');
         io.sockets.emit('clear');
@@ -146,7 +131,7 @@ io.on('connection', (socket) => {
             return;
         }
 
-        if(mapPlayer?.[putId].cashSended + Number(putCash) > maxCash) {
+        if(mapPlayer?.[putId].cashSended + mapPlayer?.[putId].cashOther  + Number(putCash) > maxCash) {
             socket.emit('alert', {message: 'Người được gửi số tiền đặt vượt quá giới hạn'})
             return;
         }
@@ -163,7 +148,7 @@ io.on('connection', (socket) => {
 
     const handleCheckOpenFullCard = (listPlayer, master) => {
         for(let i = 0; i<listPlayer.length; i++) {
-            if(!listPlayer[i]?.isOpened) {
+            if(!listPlayer[i].isOpened) {
                 return;
             }
         }
@@ -188,10 +173,9 @@ io.on('connection', (socket) => {
         if(master?.socketId === socket.id) {
             master = null;
             isPlayed = false;
-            for(let i = 0; i < listPlayer.length; i++) {
-                listPlayer[i].cards = [];
-                listPlayer[i].isOpened = false;
-            }
+            listPlayer.forEach((player) => {
+                player.reset();
+            })
             io.sockets.emit('clear');
         }
         listPlayer = listPlayer.filter((player) => player.socketId !== socket.id);
@@ -209,7 +193,7 @@ io.on('connection', (socket) => {
         if(!mapPlayer[socket.id]) {
             return;
         }
-        mapPlayer[socket.id].pos = args;
+        mapPlayer[socket.id].changePos(args);
         io.sockets.emit('update', listPlayer);
     })
 
@@ -218,8 +202,8 @@ io.on('connection', (socket) => {
             socket.emit('sendother', 'fail')
             return;
         }
-        mapPlayer[socket.id].cash -= Number(recipientCash);
-        mapPlayer[recipientId].cash += Number(recipientCash);
+        mapPlayer[socket.id].earnCash(-Number(recipientCash));
+        mapPlayer[recipientId].earnCash(Number(recipientCash));
         io.to(recipientId).emit('alert', {type: "win", message: `Bạn được ${mapPlayer[socket.id].name} tặng ${recipientCash} đ`})
         socket.emit('alert', {message: "Gửi tiền thành công"});
         io.sockets.emit('update', listPlayer);
@@ -277,19 +261,27 @@ const comparePutCash = (master, player, putCash) => {
 const handleEndTurn = (listPlayer, master) => {
     if(!master) return;
     let masterCash = 0;
-    for(let i = 0; i<listPlayer.length; i++) {
-        if(!listPlayer[i].isMaster) {
+    listPlayer.forEach((player) => {
+        if(!player.isMaster) {
             let thisTurnCash = 0;
-            thisTurnCash += comparePoint(master, listPlayer[i]);
-            listPlayer[i].putOther.forEach(({putCash, putId}) => {
+            thisTurnCash += comparePoint(master, player);
+            player.putOther.forEach(({putCash, putId}) => {
                 thisTurnCash += comparePutCash(master, mapPlayer?.[putId], putCash);
             })
             masterCash += thisTurnCash;
-            listPlayer[i].cash += thisTurnCash * -1;
-            sendCashMessage(listPlayer[i].socketId, thisTurnCash * -1 > 0 && "win", thisTurnCash * -1);
-            // masterCash += comparePutCash(master, )
+            player.earnCash(thisTurnCash * -1);
+            sendCashMessage(player.socketId, thisTurnCash * -1 > 0 && "win", thisTurnCash * -1);
         }
-    }
-    master.cash += masterCash;
+    })
+    master.earnCash(masterCash);
     sendCashMessage(master.socketId, masterCash > 0 && "win", masterCash);
 }
+
+// const resetPlayer = (listPlayer) => {
+//     for(let i = 0; i<listPlayer.length; i++) {
+//         listPlayer[i].cards = [];
+//         listPlayer[i].isOpened = false;
+//         listPlayer[i].cashOther = 0;
+//         listPlayer[i].putOther = [];
+//     }
+// }

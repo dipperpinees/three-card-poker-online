@@ -13,9 +13,15 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser (s
   <img width="550" src="https://i.ibb.co/PN57jPM/Screenshot-20220221-085402.png"/>
 </p>
 
-### Update
+### Update 1.1
   - Fix bug
   - Thêm avatar
   - Reset tiền ko cần xóa cookies
   - Thêm âm thanh khi ra điểm 1
   - Đặt tiền nhờ nhà khác
+
+### Update 1.2
+  - Tự mở bài sau 5 giây nếu người chơi chưa mở
+  - Người được đặt tiền nhờ phải đồng ý cho đặt nhờ
+  - Cải thiện tốc độ load bài
+  - Reset cho 1 người bất kì

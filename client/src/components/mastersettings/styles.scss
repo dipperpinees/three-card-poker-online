@@ -1,18 +1,14 @@
 .master-settings {
     position: fixed;
     top: 8px;
-    left: 8px;
+    left: 16px;
     display: flex;
     flex-direction: column;
-    &-input {     
-        & input {
-            width: 120px;
-        }
-    }
+
 
     & h5 {
         margin-top: 4px;
         color: white;
-        font-weight: 400;
+        font-weight: 600;
     }
 }

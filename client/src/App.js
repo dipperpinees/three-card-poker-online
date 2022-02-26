@@ -5,12 +5,12 @@ import CashInput from './components/cashinput';
 import OpenCard from './components/opencards';
 import { io } from 'socket.io-client';
 import Control from './components/control';
-import Modal from './components/modal';
 import MasterSettings from './components/mastersettings';
 import Toastify from './components/notification';
 // import sound from './assets/sound/bgsound.mp3';
 import {isMobile} from 'react-device-detect';
 import JoinForm from './components/joinform';
+import AskPut from './components/askput';
 
 const socket = io(process.env.REACT_APP_API_ENDPOINT);
 
@@ -45,6 +45,9 @@ function App(props) {
         socket.on("newmaster", () => {
             setIsMaster(true);
         })
+        socket.on("notmaster", () => {
+            setIsMaster(false);
+        })
     }, [])
 
     const connectSocket = async (name, avatar) => {
@@ -61,22 +64,19 @@ function App(props) {
             socket.emit("join", {pos: pos});
         }
     }
-
-    const cancelMaster = () => {
-        setIsMaster(false);
-    }
     
     return (
         <div className='App'>
+            <div className='background'></div>
             <Board onShowJoinForm={openJoinForm} socket={socket}/>
             <OpenCard socket={socket}/>
             {!isMaster && isJoin && <CashInput socket={socket}/>}
             {isMaster && <Control socket={socket}/>}
             <MasterSettings socket={socket} isMaster={isMaster}/>
-            <Modal socket={socket} onCancelMaster={cancelMaster}/>
             <Toastify socket={socket} />
             {isMobile && <img className="fullscreen" src="https://img.icons8.com/material-outlined/24/000000/full-screen--v1.png" onClick={() => toggleFullSceen()} alt="fullscreen"/>}
             {showJoinForm && <JoinForm onConnect={connectSocket} onClose={() => setShowJoinForm(false)}/>}
+            <AskPut socket={socket}/>
         </div>
     );
 }

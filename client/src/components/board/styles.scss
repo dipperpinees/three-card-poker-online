@@ -1,20 +1,21 @@
 .board {
     width: 900px;
     height: 450px;
-    background-color: #387C41;
-    border-radius: 200px;
-    border: 24px solid #724F39;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    background-color: #22AA9A;
+    border-radius: 260px;
+    border: 12px solid #b1dcd7;
+    position: relative;
+    // position: fixed;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
 
     & > img {
         position: absolute;
-        top: 50%;
+        top: 15%;
         left: 50%;
-        transform: translate(-50%, -50%);
-        width: 80px;
+        transform: translateX(-50%);
+        width: 56px;
     }
 }
 
@@ -22,7 +23,7 @@
     .board {
         width: 500px;
         height: 250px;
-        border: 12px solid #724F39;
+        border: 12px solid #b1dcd7;
         border-radius: 112px;
 
         & > img {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "./styles.scss";
-import FlipCard from '../flipcard';
+import FlipCard from './components/flipcard';
 import openSound from '../../assets/sound/opensound.wav';
 import winSound from '../../assets/sound/winsound.wav';
 import dealSound from '../../assets/sound/dealsound.wav';
@@ -13,6 +13,7 @@ function OpenCard({socket}) {
     const [winAudio] = useState(new Audio(winSound));
     const [dealAudio] = useState(new Audio(dealSound));
     const [failAudio] = useState(new Audio(failSound));
+    
     useEffect(() => {
         socket.on("dealcard", (args) => {
             dealAudio.play();

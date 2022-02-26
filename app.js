@@ -17,13 +17,49 @@ const mapPlayer = {};
 let master;
 let maxCash = 5000;
 
-app.get("/reset/:pass", (req, res) => {
-    if(req.params.pass === process.env.PASS) {
-        res.send("success");
-        listPlayer.forEach(player => {
-            player.cash = 0;
-        })
+app.get("/reset", (req, res) => {
+    if(!req.query.pass || !req.query.name) {
+        res.send("Need pass and user name");
+        return;
+    }
+    if(req.query.pass === process.env.PASS) {
+        if(req.query.name === 'all') {
+            listPlayer.forEach(player => {
+                player.cash = 0;
+            })
+        } else {
+            listPlayer.forEach(player => {
+                if(player.name === req.query.name) {
+                    player.cash = 0;
+                }
+            })
+        }
         io.sockets.emit('update', listPlayer);
+        res.send("Reset cash " + req.query.name + " successful");
+    } else {
+        res.send("Wrong password");
+    }
+})
+
+app.get("/kick", (req, res) => {
+    if(!req.query.pass || !req.query.name) {
+        res.send("Need pass and user name");
+        return;
+    }
+    if(req.query.pass === process.env.PASS) {
+        listPlayer = listPlayer.filter(player => player.name !== req.query.name);
+        io.sockets.emit('update', listPlayer);
+        res.send("Kick " + req.query.name + " successful");
+    } else {
+        res.send("wrong password");
+    }
+})
+
+app.get("/maxcash", (req, res) => {
+    if(req.query.pass === process.env.PASS) {
+        maxCash = Number(req.query.maxcash);
+        io.sockets.emit('maxcash', Number(req.query.maxcash));
+        res.send("success");
     } else {
         res.send("wrong password");
     }
@@ -64,7 +100,6 @@ io.on('connection', (socket) => {
             player.reset();
         })
         io.sockets.emit('update', listPlayer);
-        io.to(master.socketId).emit('start');
         io.sockets.emit('clear');
     })
 
@@ -84,6 +119,7 @@ io.on('connection', (socket) => {
             master.isMaster = false;
             mapPlayer[args].isMaster = true;
             master = mapPlayer[args];
+            socket.emit("notmaster")
             io.sockets.emit('update', listPlayer);
             io.to(args).emit("newmaster")
         }
@@ -120,33 +156,50 @@ io.on('connection', (socket) => {
         io.sockets.emit('update', listPlayer);
     })
 
-    socket.on('putother', ({putId, putCash}) => {
+    socket.on('askput', ({putId, putCash}) => {
+        if(socket.id === master?.socketId || socket.putId === master?.socketId) {
+            return;
+        }
+
         if(putCash < 1000) {
             socket.emit('alert', {message: 'Lỗi! Số tiền tối thiểu 1000đ'})
             return;
         }
+
+        if(mapPlayer?.[putId].cashSended + mapPlayer?.[putId].cashOther  + putCash > maxCash) {
+            socket.emit('alert', {message: 'Số tiền người được đặt vượt quá giới hạn'})
+            return;
+        }
+
         if(isPlayed) {
             socket.emit('alert', {message: 'Lỗi! Game đã bắt đầu'})
             return;
         }
 
-        if(mapPlayer[socket.id].putOther.length > 1) {
-            socket.emit('alert', {message: 'Chỉ được đặt nhờ tối đa 2 nhà'})
+        if(mapPlayer[socket.id].putOther.length > 0) {
+            socket.emit('alert', {message: 'Chỉ được đặt nhờ duy nhất 1 nhà'})
             return;
         }
-        if(mapPlayer?.[putId].cashSended + mapPlayer?.[putId].cashOther  + putCash > maxCash) {
-            socket.emit('alert', {message: 'Người được gửi số tiền đặt vượt quá giới hạn'})
+        console.log(putId, putCash)
+        io.to(putId).emit('askput', {putName: mapPlayer[socket.id].name, putCash: putCash, putId: socket.id})
+    })
+
+    socket.on('putother', ({putId, putCash}) => {
+        if(isPlayed) {
+            socket.emit('alert', {message: 'Lỗi! Game đã bắt đầu'})
             return;
         }
 
-        if(socket.id === master?.socketId) {
+        if(mapPlayer?.[socket.id].cashSended + mapPlayer?.[socket.id].cashOther  + putCash > maxCash) {
+            socket.emit('alert', {message: 'Số tiền của bạn vượt quá giới hạn'})
             return;
         }
-        mapPlayer[putId].cashOther += putCash;
-        mapPlayer[socket.id].putOther.push({putId, putCash});
-        io.to(putId).emit("alert", {message: `${mapPlayer[socket.id].name} đặt nhờ ${putCash}`});
+
+        mapPlayer[socket.id].cashOther += putCash;
+        mapPlayer[putId].putOther.push({putId: socket.id, putCash: putCash});
+        io.to(putId).emit("alert", {message: `Đặt nhờ ${mapPlayer[socket.id].name} ${putCash}đ thành công`});
         io.sockets.emit('update', listPlayer);
-        socket.emit("alert", {message: "Đặt nhờ thành công"})
+        socket.emit("alert", {message: `Cho ${mapPlayer[socket.id].name} đặt nhờ thành công`})
     })
 
     socket.on('opencard', () => {

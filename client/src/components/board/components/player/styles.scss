@@ -1,0 +1,96 @@
+.player {
+    width: 140px;
+    height: 64px;
+    padding: 4px;
+    position: absolute;
+    color: white;
+    border-radius: 12px;
+    &-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+
+        &-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%
+        }
+
+        &-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 0.2px solid #fff;
+            overflow: hidden;
+            margin-right: 4px;
+            & img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        &-name {
+            font-size: 13px;
+        }
+
+        &-cash {
+            font-size: 13px;
+            &:hover {
+                cursor: pointer;
+                color: red;
+            }
+        }
+    }
+
+    &-master {
+        position: absolute;
+        top: -14px;
+        right: -8px;
+        font-size: 20px;
+        z-index: 4;
+    }
+
+    &-emoji {
+        position: absolute;
+        top: -14px;
+        left: -8px;
+        font-size: 20px;
+        z-index: 4;
+    }
+}
+
+@media (max-width: 1000px) {
+    .player {
+        width: 80px;
+        height: 44px;
+        padding: 2px;
+        &-header {
+            &-name {
+                font-size: 8px;
+            }
+            &-cash {
+                font-size: 8px;
+            }
+            &-avatar {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        &-master {
+            font-size: 12px;
+            top: -8px;
+            right: -8px;
+        }
+
+        &-emoji {
+            font-size: 12px;
+            top: -8px;
+            left: -8px;
+        }
+    }
+
+}

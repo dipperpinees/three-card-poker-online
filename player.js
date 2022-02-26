@@ -11,9 +11,15 @@ module.exports = class Player {
         this.cards = [];
         this.cashOther = 0;
         this.putOther = [];
+        this.emoji = this.cash >= 100000 ? "rich" : (this.cash <= -100000 ? "poor" : null);
     }
     earnCash (cash) {
         this.cash += cash;
+        if(this.cash >= 100000) {
+            this.emoji = "rich";
+        } else if(this <= -100000) {
+            this.emoji = "poor";
+        }
     }
     reset () {
         this.cards = [];

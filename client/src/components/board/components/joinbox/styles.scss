@@ -1,0 +1,39 @@
+.joinbox {
+    width: 140px;
+    height: 64px;
+    padding: 4px;
+    position: absolute;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    & div {
+        background-color: #230342;
+        padding: 4px;
+        border: 2px solid #9880E9;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+@media (max-width: 1000px) {
+    .joinbox {
+        width: 80px;
+        height: 44px;
+
+        & div {
+            width: 36px;
+            height: 36px;
+        }
+    }
+
+}

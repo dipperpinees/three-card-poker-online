@@ -17,7 +17,7 @@ module.exports = class Player {
         this.cash += cash;
         if(this.cash >= 100000) {
             this.emoji = "rich";
-        } else if(this <= -100000) {
+        } else if(this.cash <= -100000) {
             this.emoji = "poor";
         }
     }

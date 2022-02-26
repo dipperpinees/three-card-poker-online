@@ -29,7 +29,6 @@ function OpenCard({socket}) {
 
     const handleCountOpened = () => {
         openAudio.play();
-
         setCountOpened(countOpened + 1);
         if(countOpened === 2) {
             if(cards.point1 === 11 || cards.point1 === 10) {

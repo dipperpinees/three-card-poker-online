@@ -180,7 +180,6 @@ io.on('connection', (socket) => {
             socket.emit('alert', {message: 'Chỉ được đặt nhờ duy nhất 1 nhà'})
             return;
         }
-        console.log(putId, putCash)
         io.to(putId).emit('askput', {putName: mapPlayer[socket.id].name, putCash: putCash, putId: socket.id})
     })
 

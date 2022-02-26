@@ -3,7 +3,7 @@ import "./styles.scss";
 
 function Control({socket}) {
     const [showControl, setShowControl] = useState("start");
-    const [count, setCount] = useState(4);
+    const [count, setCount] = useState(6);
     useEffect(() => {
         socket.on("newturn", () => {
             setShowControl("newturn");
@@ -21,7 +21,7 @@ function Control({socket}) {
     const handleNewGame = () => {
         socket.emit("reset"); 
         setShowControl("start");
-        setCount(4);
+        setCount(6);
     }
 
     const handleStart = () => {

@@ -14,7 +14,8 @@
     "react-toastify": "^8.2.0",
     "sass": "^1.49.8",
     "socket.io-client": "^4.4.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "react-confirm-alert": "^2.8.0"
   },
   "scripts": {
     "start": "react-scripts start",

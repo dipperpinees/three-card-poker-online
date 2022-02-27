@@ -10,7 +10,6 @@ import Toastify from './components/notification';
 // import sound from './assets/sound/bgsound.mp3';
 import {isMobile} from 'react-device-detect';
 import JoinForm from './components/joinform';
-import AskPut from './components/askput';
 
 const socket = io(process.env.REACT_APP_API_ENDPOINT);
 
@@ -76,7 +75,6 @@ function App(props) {
             <Toastify socket={socket} />
             {isMobile && <img className="fullscreen" src="https://img.icons8.com/material-outlined/24/000000/full-screen--v1.png" onClick={() => toggleFullSceen()} alt="fullscreen"/>}
             {showJoinForm && <JoinForm onConnect={connectSocket} onClose={() => setShowJoinForm(false)}/>}
-            <AskPut socket={socket}/>
         </div>
     );
 }

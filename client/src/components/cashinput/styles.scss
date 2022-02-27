@@ -1,7 +1,7 @@
 .cashinput {
     display: flex;
     flex-direction: column;
-    width: 160px;
+    width: 200px;
     position: fixed;
     // bottom: 8px;
     // left: 16px;
@@ -12,25 +12,35 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 4px;
+        margin-bottom: 12px;
         & select {
             width: 100%;
-            height: 32px;
-            border-radius: 8px;
+            // height: 32px;
+            border-radius: 32px;
             background-color: white;
+            padding: 8px;
             border: 1px solid #000;
         }
     }
     & button {
-        border-radius: 8px!important;
+        border-radius: 32px!important;
+        padding: 4px;
     }
 }
 
 @media (max-width: 1000px) {
     .cashinput {
-        width: 100px;
+        width: 140px;
         button {
             font-size: 12px;
         }
+
+        & div {
+            & select {
+                padding: 4px;
+            }
+            margin-bottom: 8px;
+        }
+        
     }
 }

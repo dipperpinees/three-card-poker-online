@@ -6,29 +6,29 @@ function JoinBox({index, onConnect}) {
     const handlePosPc = (index) => {
         switch(index) {
             case 1: 
-                return {top: 100, left: -80}
+                return {top: 108, left: -80}
             case 2: 
                 return {top: -36, left: 48}
             case 3: 
-                return {top: -56, left: 240}
+                return {top: -56, left: 260}
             case 4: 
-                return {top: -56, right: 240}
+                return {top: -56, right: 260}
             case 5:
                 return {top: -36, right: 48}
             case 6: 
-                return {top: 100, right: -80}
+                return {top: 108, right: -80}
             case 7: 
-                return {bottom: 100, right: -80}
+                return {bottom: 108, right: -80}
             case 8: 
                 return {bottom: -36, right: 48}
             case 9:
-                return {bottom: -56, right: 240}
+                return {bottom: -56, right: 260}
             case 10:
-                return {bottom: -56, left: 240}
+                return {bottom: -56, left: 260}
             case 11: 
                 return {bottom: -36, left: 48}
             case 12: 
-                return {bottom: 100, left: -80}
+                return {bottom: 108, left: -80}
         }
     }
     const handlePosMobile = (index) => {

@@ -4,28 +4,26 @@ module.exports = class Player {
         this.pos = pos;
         this.isMaster = isMaster;
         this.cash = cash;
-        this.avatar = avatar || "https://i.ibb.co/0c34PcQ/playing-cards.png";
+        this.avatar = avatar || "https://i.ibb.co/6Wkjgmx/poker-cards.png";
         this.socketId = socketId;
         this.cashSended = 1000;
         this.isOpened = false;
         this.cards = [];
         this.cashOther = 0;
         this.putOther = [];
-        this.emoji = this.cash >= 100000 ? "rich" : (this.cash <= -100000 ? "poor" : null);
+        this.earn = null;
+        // this.emoji = this.cash >= 100000 ? "rich" : (this.cash <= -100000 ? "poor" : null);
     }
     earnCash (cash) {
         this.cash += cash;
-        if(this.cash >= 100000) {
-            this.emoji = "rich";
-        } else if(this.cash <= -100000) {
-            this.emoji = "poor";
-        }
+        this.earn = cash;
     }
     reset () {
         this.cards = [];
         this.isOpened = false;
         this.cashOther = 0;
         this.putOther = [];
+        this.earn = null;
     }
     changePos (pos) {
         this.pos = pos;

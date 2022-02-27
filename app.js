@@ -149,14 +149,14 @@ io.on('connection', (socket) => {
     })
 
     socket.on('sendcash', (args) => {
-        if(Number(args) > maxCash) {
+        if(Number(args) + mapPlayer[socket.id].cashOther > maxCash) {
             args = maxCash;
         }
         mapPlayer[socket.id].cashSended = Number(args);
         io.sockets.emit('update', listPlayer);
     })
 
-    socket.on('askput', ({putId, putCash}) => {
+    socket.on('putother', ({putId, putCash}) => {
         if(socket.id === master?.socketId || socket.putId === master?.socketId) {
             return;
         }
@@ -176,29 +176,16 @@ io.on('connection', (socket) => {
             return;
         }
 
-        if(mapPlayer[socket.id].putOther.length > 0) {
-            socket.emit('alert', {message: 'Chỉ được đặt nhờ duy nhất 1 nhà'})
-            return;
-        }
-        io.to(putId).emit('askput', {putName: mapPlayer[socket.id].name, putCash: putCash, putId: socket.id})
-    })
-
-    socket.on('putother', ({putId, putCash}) => {
-        if(isPlayed) {
-            socket.emit('alert', {message: 'Lỗi! Game đã bắt đầu'})
+        if(mapPlayer[putId].putOther.length > 1) {
+            socket.emit('alert', {message: 'Chỉ được đặt nhờ tối đa 2 nhà'})
             return;
         }
 
-        if(mapPlayer?.[socket.id].cashSended + mapPlayer?.[socket.id].cashOther  + putCash > maxCash) {
-            socket.emit('alert', {message: 'Số tiền của bạn vượt quá giới hạn'})
-            return;
-        }
-
-        mapPlayer[socket.id].cashOther += putCash;
-        mapPlayer[putId].putOther.push({putId: socket.id, putCash: putCash});
-        io.to(putId).emit("alert", {message: `Đặt nhờ ${mapPlayer[socket.id].name} ${putCash}đ thành công`});
+        mapPlayer[putId].cashOther += putCash;
+        mapPlayer[socket.id].putOther.push({putId, putCash});
+        socket.emit("alert", {message: `Đặt nhờ thành công`})
+        io.to(putId).emit("alert", {message: `${mapPlayer[socket.id].name} đặt nhờ bạn ${putCash}đ`});
         io.sockets.emit('update', listPlayer);
-        socket.emit("alert", {message: `Cho ${mapPlayer[socket.id].name} đặt nhờ thành công`})
     })
 
     socket.on('opencard', () => {

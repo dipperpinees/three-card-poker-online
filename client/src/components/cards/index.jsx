@@ -3,20 +3,20 @@ import { handleCardImage } from '../../helper/cardImg';
 import "./styles.scss";
 import {isMobile} from 'react-device-detect';
 
-function Cards({pos, cards}) {
+function Cards({pos, cards, isMaster}) {
     const handlePosPc = (pos) => {
         switch(pos) {
             case "top": {
-                return {top: -56}
+                return {top: -64}
             }
             case "bottom": {
-                return {bottom: -60}
+                return isMaster ? {bottom: -70} : {bottom: -80}
             }
             case "left": {
-                return {left: -124, top: 0}
+                return {left: -76, top: 12}
             }
             case "right": {
-                return {right: -124, top: 0}
+                return {right: -76, top: 12}
             }
         }
     }
@@ -24,16 +24,16 @@ function Cards({pos, cards}) {
     const handlePosMobile = (pos) => {
         switch(pos) {
             case "top": {
-                return {top: -32}
+                return {top: -36}
             }
             case "bottom": {
-                return {bottom: -32}
+                return isMaster ? {bottom: -46} : {bottom: -50}
             }
             case "left": {
-                return {left: -72, top: 4}
+                return {left: -56, top: 4}
             }
             case "right": {
-                return {right: -72, top: 4}
+                return {right: -56, top: 4}
             }
         }
     }

@@ -5,36 +5,36 @@ import "./styles.scss";
 import {isMobile} from 'react-device-detect';
 
 function Player({player, isYou, onShowForm}) {
-    const {isMaster, socketId, cash, isOpened, cards, cashSended, name, pos, avatar, cashOther, emoji} = player;
+    const {isMaster, socketId, cash, isOpened, cards, cashSended, name, pos, avatar, cashOther, earn} = player;
     if(isYou) {
         localStorage.setItem("cash2", cash);
     }
     const handlePosPc = (index) => {
         switch(index) {
             case 1: 
-                return {top: 100, left: -80}
+                return {top: 116, left: -80}
             case 2: 
                 return {top: -36, left: 48}
             case 3: 
-                return {top: -56, left: 260}
+                return {top: -52, left: 260}
             case 4: 
-                return {top: -56, right: 260}
+                return {top: -52, right: 260}
             case 5:
                 return {top: -36, right: 48}
             case 6: 
-                return {top: 100, right: -80}
+                return {top: 116, right: -80}
             case 7: 
-                return {bottom: 100, right: -80}
+                return {bottom: 116, right: -80}
             case 8: 
-                return {bottom: -36, right: 48}
+                return {bottom: -28, right: 48}
             case 9:
-                return {bottom: -56, right: 260}
+                return {bottom: -36, right: 260}
             case 10:
-                return {bottom: -56, left: 260}
+                return {bottom: -36, left: 260}
             case 11: 
-                return {bottom: -36, left: 48}
+                return {bottom: -28, left: 48}
             case 12: 
-                return {bottom: 100, left: -80}
+                return {bottom: 116, left: -80}
         }
     }
     const handlePosMobile = (index) => {
@@ -118,25 +118,44 @@ function Player({player, isYou, onShowForm}) {
     }
 
     return (
-        <div className='player' 
-            style={{...handlePos(isMobile, pos), border: handleBorder() , backgroundColor: handleBgColor() }} 
-        >
-            <div className='player-header'>
-                <div className='player-header-info'>
-                    <div className='player-header-avatar'>
-                        <img src={avatar} alt="avatar" />
-                    </div>
-                    <div>
-                        <p className='player-header-name'>{name}</p>
-                        <p className='player-header-cash' onClick={!isYou && handleSend}>{formatMoney(cash)}đ</p>
-                    </div>
-                </div>
-                {!isMaster && <p className='player-header-cash' onClick={!isYou && !isMaster && handlePut}>Đặt: {formatMoney(cashSended + cashOther)}đ</p>}
+        // <div className='player' 
+        //     style={{...handlePos(isMobile, pos), border: handleBorder() , backgroundColor: handleBgColor() }} 
+        // >
+        //     <div className='player-header'>
+        //         <div className='player-header-info'>
+        //             <div className='player-header-avatar'>
+        //                 <img src={avatar} alt="avatar" />
+        //             </div>
+        //             <div>
+        //                 <p className='player-header-name'>{name}</p>
+        //                 <p className='player-header-cash' onClick={!isYou && handleSend}>{formatMoney(cash)}đ</p>
+        //             </div>
+        //         </div>
+        //         {!isMaster && <p className='player-header-cash' onClick={!isYou && !isMaster && handlePut}>Đặt: {formatMoney(cashSended + cashOther)}đ</p>}
+        //     </div>
+        //     {isOpened && <Cards pos={handlePosCard(pos)} cards={cards}/>}
+        //     {isMaster && <div className="player-master">👑</div>}
+        //     {emoji === "rich" && <div className="player-emoji">💵</div>}
+        //     {emoji === "poor" && <div className="player-emoji">😭</div>}
+        // </div>
+        <div className={`player ${isMaster && "master"} ${isYou && "you"}`} style={{...handlePos(isMobile, pos)}}>
+            <div className="player-cash" onClick={!isYou && handleSend}>
+                <p>💵 {formatMoney(cash)}đ</p>
             </div>
-            {isOpened && <Cards pos={handlePosCard(pos)} cards={cards}/>}
-            {isMaster && <div className="player-master">👑</div>}
-            {emoji === "rich" && <div className="player-emoji">💵</div>}
-            {emoji === "poor" && <div className="player-emoji">😭</div>}
+
+            <div className="player-info">
+                <div className="player-info-avatar">
+                    <img src={avatar} alt="avatar" />
+                </div>
+                <h5>{name}</h5>
+                {isMaster && <div className="player-master">👑</div>}
+                {earn !== null && <span className="player-earn">{earn >= 0 ? `+${earn}` : earn}</span>}
+            </div>
+
+            {!isMaster && <div className="player-put" onClick={!isYou && handlePut}>
+                <p>Đặt {formatMoney(cashSended + cashOther)}đ</p>
+            </div>}
+            {isOpened && <Cards pos={handlePosCard(pos)} cards={cards} isMaster={isMaster}/>}
         </div>
     );
 }

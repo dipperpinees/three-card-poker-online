@@ -58,7 +58,7 @@ function Board({onShowJoinForm, socket}) {
     }
 
     const handlePutCash = (putCash) => {
-        socket.emit('askput', {putId: sendId, putCash: Number(putCash)});
+        socket.emit('putother', {putId: sendId, putCash: Number(putCash)});
     }
 
     return (

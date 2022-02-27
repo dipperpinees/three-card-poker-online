@@ -141,6 +141,7 @@
     height: 64px;
     &-info {
         position: relative;
+        margin-bottom: 4px;
         &-avatar {
             width: 72px;
             height: 72px;
@@ -156,7 +157,7 @@
         }
         & h5 {
             position: absolute;
-            bottom: 0px;
+            bottom: -2px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 12px;
@@ -173,7 +174,6 @@
     }
 
     &-put  {
-        margin-top: 2px;
         & p {
             color: white;
             background-color: #583eb0;
@@ -261,7 +261,7 @@
         }
 
         &-put  {
-            margin-top: 4px;
+            // margin-top: 4px;
             & p {
                 font-size: 8px;
             }
@@ -272,6 +272,10 @@
             top: 0px;
             right: 0px;
             font-size: 12px;
+        }
+
+        &-earn {
+            font-size: 10px;
         }
     }
 }

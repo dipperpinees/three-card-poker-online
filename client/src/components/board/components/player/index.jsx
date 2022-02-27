@@ -28,9 +28,9 @@ function Player({player, isYou, onShowForm}) {
             case 8: 
                 return {bottom: -28, right: 48}
             case 9:
-                return {bottom: -36, right: 260}
+                return {bottom: -44, right: 260}
             case 10:
-                return {bottom: -36, left: 260}
+                return {bottom: -44, left: 260}
             case 11: 
                 return {bottom: -28, left: 48}
             case 12: 
@@ -96,25 +96,6 @@ function Player({player, isYou, onShowForm}) {
 
     const handlePut = () => {
         onShowForm(socketId, name, "put");
-    }
-
-    const handleBgColor = () => {
-        if(isYou) {
-            return "#147E6D";
-        }
-        return "#230342";
-    }
-
-    const handleBorder = () => {
-        if(isYou) {
-            return "2px solid #F7C600";
-        }
-
-        if(isMaster) {
-            return "2.5px solid #F70000";
-        }
-
-        return "2px solid #9880E9";
     }
 
     return (

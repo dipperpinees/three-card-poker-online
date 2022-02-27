@@ -7,7 +7,7 @@ function Cards({pos, cards, isMaster}) {
     const handlePosPc = (pos) => {
         switch(pos) {
             case "top": {
-                return {top: -64}
+                return isMaster ? {top: -66} : {top: -72}
             }
             case "bottom": {
                 return isMaster ? {bottom: -70} : {bottom: -80}
@@ -24,16 +24,16 @@ function Cards({pos, cards, isMaster}) {
     const handlePosMobile = (pos) => {
         switch(pos) {
             case "top": {
-                return {top: -36}
+                return isMaster ? {top: -36} : {top: -44}
             }
             case "bottom": {
                 return isMaster ? {bottom: -46} : {bottom: -50}
             }
             case "left": {
-                return {left: -56, top: 4}
+                return {left: -56, top: 12}
             }
             case "right": {
-                return {right: -56, top: 4}
+                return {right: -56, top: 12}
             }
         }
     }

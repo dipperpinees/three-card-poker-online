@@ -1,8 +1,9 @@
 {
-  "name": "3cay",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "3cayonline",
+  "version": "1.1.2",
+  "main": "app.js",
   "license": "MIT",
+  "author": "HiepNguyen",
   "scripts": {
     "server": "nodemon app.js",
     "client": "npm start --prefix client",

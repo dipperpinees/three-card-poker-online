@@ -99,16 +99,16 @@
     .player {
         &-info {
             &-avatar {
-                border: 2.5px solid #E71A23;
+                border: 2.5px solid #F70000;
             }
     
             & h5 {
-                background-color: #E71A23;
+                background-color: #F70000;
             }
         }
 
         &-put p {
-            background-color: #E71A23;
+            background-color: #F70000;
         }
     }
 }

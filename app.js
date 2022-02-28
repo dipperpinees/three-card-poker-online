@@ -150,14 +150,15 @@ io.on('connection', (socket) => {
 
     socket.on('sendcash', (args) => {
         if(Number(args) + mapPlayer[socket.id].cashOther > maxCash) {
-            args = maxCash;
+            socket.emit("alert", {message: "Số tiền vượt quá giới hạn"}) 
+            return;
         }
         mapPlayer[socket.id].cashSended = Number(args);
         io.sockets.emit('update', listPlayer);
     })
 
     socket.on('putother', ({putId, putCash}) => {
-        if(socket.id === master?.socketId || socket.putId === master?.socketId) {
+        if(socket.id === master?.socketId || putId === master?.socketId || !mapPlayer[putId]) {
             return;
         }
 
@@ -166,7 +167,7 @@ io.on('connection', (socket) => {
             return;
         }
 
-        if(mapPlayer?.[putId].cashSended + mapPlayer?.[putId].cashOther  + putCash > maxCash) {
+        if(mapPlayer?.[putId]?.cashSended + mapPlayer?.[putId]?.cashOther  + putCash > maxCash) {
             socket.emit('alert', {message: 'Số tiền người được đặt vượt quá giới hạn'})
             return;
         }
@@ -264,7 +265,6 @@ const comparePoint = (master, player) => {
     }
 }
 
-//player1 là người được đặt nhờ, player2 là người đặt nhờ
 const comparePutCash = (master, player, putCash) => {
     if(!master || !player) return 0;
     if(master.cards.point1 > player.cards.point1 || (master.cards.point1 === player.cards.point1 && master.cards.point2 > player.cards.point2)) {

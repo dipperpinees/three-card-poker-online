@@ -65,19 +65,4 @@ const dealingCard = (numPlayer) => {
     return dealedCard;
 } 
 
-    // for(let i = 0; i<numPlayer; i++) {
-    //     const threeCards = {
-            
-    //     };
-    //     for(let i = 0; i<3; i++) {
-    //         const randomNumber = Math.floor(Math.random() * listCard.length);
-    //         threeCards.cards.push(listCard[randomNumber]);
-    //         listCard.splice(randomNumber, 1);
-    //     }
-    //     const {point1, point2} = calculatePoint(threeCards.cards);
-    //     threeCards.point1 = point1;
-    //     threeCards.point2 = point2;
-    //     dealedCard.push(threeCards);
-    // }
-
 module.exports = {dealingCard};

@@ -1,4 +1,4 @@
-### <a href="https://3cay.hiepnguyen.site/">DEMO</a>
+### <a href="https://3cayfe.vercel.app/">DEMO</a>
 
 ## Install packages
 #### `npm install && npm install --cwd client` 

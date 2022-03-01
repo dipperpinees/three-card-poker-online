@@ -177,7 +177,7 @@ io.on('connection', (socket) => {
             return;
         }
 
-        if(mapPlayer[putId].putOther.length > 1) {
+        if(mapPlayer[socket.id].putOther.length > 1) {
             socket.emit('alert', {message: 'Chỉ được đặt nhờ tối đa 2 nhà'})
             return;
         }

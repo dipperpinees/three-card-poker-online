@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ba cay admin page</title>
+</head>
+<body>
+    <button class="resetall" >Reset All</button>
+    <ul>
+        <% listPlayer.forEach((player) => { %>
+             <li class="player"> 
+                <h4> <%= player.name %></h4> 
+                <input type="number" id= <%=player.socketId %> value=<%= player.cash %> >set cash</input>
+                <button id= <%=player.socketId %> >Kick</button>
+             </li>
+        <% }) %>
+    </ul>
+</body>
+<script>
+    document.querySelector(".resetall").onclick =  async (e) => {
+        const response = await fetch("/resetall?pass=hiep123", {
+            method: "post",
+        })
+        const responseJSON = await response.json();
+        if(response.ok) {
+            alert("Thành công");
+        } else {
+            alert("Thất bại"); 
+        }
+    }
+
+    const listInput = document.querySelectorAll(".player input");
+
+    listInput.forEach((input) => {
+        input.onchange = async (e) => {
+            const response = await fetch(`/cash?pass=hiep123&id=${input.getAttribute("id")}&cash=${e.target.value}`, {
+                method: "post",
+            })
+            const responseJSON = await response.json();
+            if(response.ok) {
+                alert("Thành công");
+            } else {
+                alert("Thất bại"); 
+            }
+        }
+    })
+
+    const listKick = document.querySelectorAll(".player button");
+
+    listKick.forEach((kickButton) => {
+        kickButton.onclick = async (e) => {
+            const response = await fetch(`/kick?pass=hiep123&id=${kickButton.getAttribute("id")}`, {
+                method: "post",
+            })
+            const responseJSON = await response.json();
+            if(response.ok) {
+                alert("Thành công");
+            } else {
+                alert("Thất bại"); 
+            }
+        }
+    })
+</script>
+</html>

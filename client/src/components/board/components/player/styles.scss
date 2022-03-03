@@ -167,9 +167,10 @@
             min-width: 60px;
             max-width: 80px;
             text-align: center;
-            overflow: hidden;
-            text-overflow: ellipsis;
             font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
         }
     }
 

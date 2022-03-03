@@ -7,14 +7,13 @@ import { io } from 'socket.io-client';
 import Control from './components/control';
 import MasterSettings from './components/mastersettings';
 import Toastify from './components/notification';
-// import sound from './assets/sound/bgsound.mp3';
 import {isMobile} from 'react-device-detect';
 import JoinForm from './components/joinform';
 
 const socket = io(process.env.REACT_APP_API_ENDPOINT);
 
 function App(props) {
-    // const [audio] = useState(new Audio(sound));
+   
     const [showJoinForm, setShowJoinForm] = useState(false);
     const [pos, setPos] = useState();
     const toggleFullSceen = () => {
@@ -31,9 +30,6 @@ function App(props) {
     const [isJoin, setIsJoin] = useState(false);
     useEffect(() => {
         socket.on("join", (args) => {
-            // audio.play();
-            // audio.loop = true;
-            // audio.volume = 0.2;
             if(args === "fail") {
                 alert("Chưa thể tham gia phòng");
                 return;
@@ -47,6 +43,9 @@ function App(props) {
         socket.on("notmaster", () => {
             setIsMaster(false);
         })
+        socket.on("joinform", () => {
+            setShowJoinForm(true);
+        })
     }, [])
 
     const connectSocket = async (name, avatar) => {
@@ -57,11 +56,7 @@ function App(props) {
     }   
     const openJoinForm = (pos) => {
         setPos(pos);
-        if(!isJoin) {
-            setShowJoinForm(true);
-        } else {
-            socket.emit("join", {pos: pos});
-        }
+        socket.emit("changepos", {pos: pos});
     }
     
     return (

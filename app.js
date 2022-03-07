@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('reset', (args) => {
-	    game.reset();
+	game.reset();
     })
 
     socket.on('askmaster', () => {

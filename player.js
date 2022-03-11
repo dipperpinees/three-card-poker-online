@@ -12,7 +12,6 @@ module.exports = class Player {
         this.cashOther = 0;
         this.putOther = [];
         this.earn = null;
-        // this.emoji = this.cash >= 100000 ? "rich" : (this.cash <= -100000 ? "poor" : null);
     }
     earnCash (cash) {
         this.cash += cash;

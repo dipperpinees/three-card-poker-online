@@ -12,5 +12,6 @@ export const handleCardImage = (point, type) => {
         case "bich": {
             return require("../assets/img/" + point + "_of_spades.webp");
         }
+        default: 
     }
 }

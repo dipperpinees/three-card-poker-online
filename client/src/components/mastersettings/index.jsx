@@ -5,16 +5,8 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
 
 function MasterSettings({socket, isMaster}) {
-    const [showSettings, setShowSettings] = useState(true);
     const [maxCash, setMaxCash] = useState(5000);
-    const inputRef = useRef();
     useEffect(() => {
-        socket.on("clear", () => {
-            setShowSettings(true);
-        })
-        // socket.on("start", () => {
-        //     setShowSettings(false);
-        // })
         socket.on("maxcash", (args) => {
             setMaxCash(args);
         })
@@ -37,10 +29,6 @@ function MasterSettings({socket, isMaster}) {
 
     return (
         <div className='master-settings'>
-        {/* {showSettings && isMaster && <div className='master-settings-input'>
-            <input type="number" placeholder='Tiền đặt tối đa' ref={inputRef}/>
-            <button onClick={() => socket.emit("maxcash", inputRef.current.value)}>Đặt</button>
-        </div>} */}
         <h5>Tối đa: {formatMoney(maxCash)}đ</h5>
         </div>
     );

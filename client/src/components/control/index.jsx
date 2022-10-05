@@ -35,6 +35,7 @@ function Control({socket}) {
     return (
         <div className="control">
             {showControl === "start" && <button onClick={handleStart}>Chia bài {count > 0 && `(${count})`}</button>}
+            {showControl === "start" && <button onClick={() => socket.emit("contribute")}>Góp gà</button>}
             {showControl === "newturn" && <button onClick={handleNewGame}>Ván mới </button>}
         </div>
     );

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import JoinBox from './components/joinbox';
-import Player from './components/player';
-import SendCash from './components/sendcash';
+import JoinBox from './components/JoinBox';
+import Player from './components/Player';
+import SendCash from './components/SendCash';
 import "./styles.scss";
 
 function Board({onShowJoinForm, socket}) {
@@ -69,7 +69,8 @@ function Board({onShowJoinForm, socket}) {
             {listPlayer.map((player, index) => (
                 <Player isYou={socket.id === player.socketId} key={index} player={player} onShowForm={handleShowForm}/>
             ))}
-            <img src={require("../../assets/img/poker-cards.png")} alt="icon" />
+            <img className="board-icon" src={require("../../assets/img/cards.png")} alt="icon" />
+            {/* <img className="board-girl" src={require("../../assets/img/girl.png")} alt="girl" /> */}
             {showForm && <SendCash onClose={() => setShowForm(false)} onSubmit={formType === 'send' ? handleSendCash : handlePutCash} title={message}/>}
         </div>
     );

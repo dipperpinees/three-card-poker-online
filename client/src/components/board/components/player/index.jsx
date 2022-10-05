@@ -1,6 +1,6 @@
 import React from 'react';
 import { formatMoney } from '../../../../helper/money';
-import Cards from '../../../cards';
+import Cards from '../../../Cards';
 import "./styles.scss";
 import {isMobile} from 'react-device-detect';
 
@@ -35,6 +35,8 @@ function Player({player, isYou, onShowForm}) {
                 return {bottom: -28, left: 48}
             case 12: 
                 return {bottom: 116, left: -80}
+            default:
+                return;
         }
     }
     const handlePosMobile = (index) => {
@@ -63,6 +65,8 @@ function Player({player, isYou, onShowForm}) {
                 return {bottom: -38, left: 24}
             case 12: 
                 return {bottom: 42, left: -52}
+            default:
+                return;
         }
     }
 
@@ -99,28 +103,8 @@ function Player({player, isYou, onShowForm}) {
     }
 
     return (
-        // <div className='player' 
-        //     style={{...handlePos(isMobile, pos), border: handleBorder() , backgroundColor: handleBgColor() }} 
-        // >
-        //     <div className='player-header'>
-        //         <div className='player-header-info'>
-        //             <div className='player-header-avatar'>
-        //                 <img src={avatar} alt="avatar" />
-        //             </div>
-        //             <div>
-        //                 <p className='player-header-name'>{name}</p>
-        //                 <p className='player-header-cash' onClick={!isYou && handleSend}>{formatMoney(cash)}đ</p>
-        //             </div>
-        //         </div>
-        //         {!isMaster && <p className='player-header-cash' onClick={!isYou && !isMaster && handlePut}>Đặt: {formatMoney(cashSended + cashOther)}đ</p>}
-        //     </div>
-        //     {isOpened && <Cards pos={handlePosCard(pos)} cards={cards}/>}
-        //     {isMaster && <div className="player-master">👑</div>}
-        //     {emoji === "rich" && <div className="player-emoji">💵</div>}
-        //     {emoji === "poor" && <div className="player-emoji">😭</div>}
-        // </div>
         <div className={`player ${isMaster && "master"} ${isYou && "you"}`} style={{...handlePos(isMobile, pos)}}>
-            <div className="player-cash" onClick={!isYou && handleSend}>
+            <div className="player-cash" onClick={!isYou ? handleSend : undefined}>
                 <p>💵 {formatMoney(cash)}đ</p>
             </div>
 
@@ -134,7 +118,10 @@ function Player({player, isYou, onShowForm}) {
             </div>
 
             {!isMaster && <div className="player-put" onClick={!isYou && handlePut}>
-                <p>Đặt {formatMoney(cashSended + cashOther)}đ</p>
+                <p>
+                    <img src="https://img.icons8.com/office/16/000000/chip.png" alt="game"/> 
+                    {formatMoney(cashSended + cashOther)}đ
+                </p>
             </div>}
             {isOpened && <Cards pos={handlePosCard(pos)} cards={cards} isMaster={isMaster}/>}
         </div>

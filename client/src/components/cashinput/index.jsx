@@ -22,11 +22,10 @@ function CashInput({socket, isMaster}) {
                     {[...Array(10)].map((x, i) => (
                         <option value={(i+1)*1000}>{(i+1)*1000}đ</option>
                     ))}
-                    <option value={10000}>15000đ</option>
-                    <option value={20000}>20000đ</option>
                 </select>
     
             </div>
+            <button onClick={() => socket.emit("contribute")}>Góp gà</button>
             <button onClick={() => socket.emit("askmaster")}>Xin làm cái</button>
         </div>
         }

@@ -10,7 +10,7 @@ function FlipCard({card, onFlip}) {
         setIsFlip(true);
         onFlip();
     }
-
+    
     return (
         <ReactCardFlip isFlipped={isFlip} flipDirection="horizontal">
             <div>

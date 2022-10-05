@@ -9,16 +9,16 @@
     justify-content: center;
     font-size: 32px;
     & div {
-        background-color: #230342;
+        background-color: #2303427d;
         padding: 4px;
-        border: 2px solid #9880E9;
+        border: 2px solid #196794;
         width: 40px;
         height: 40px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
         &:hover {
             transform: scale(1.2)
         }

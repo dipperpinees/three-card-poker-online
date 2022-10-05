@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import "./styles.scss";
-import FlipCard from './components/flipcard';
+import FlipCard from './components/FlipCard';
 import openSound from '../../assets/sound/opensound.wav';
 import winSound from '../../assets/sound/winsound.wav';
 import dealSound from '../../assets/sound/dealsound.wav';
-// import failSound from '../../assets/sound/fail.mp3';
 
 function OpenCard({socket}) {
     const [cards, setCards] = useState(null);
@@ -12,7 +11,6 @@ function OpenCard({socket}) {
     const [openAudio] = useState(new Audio(openSound));
     const [winAudio] = useState(new Audio(winSound));
     const [dealAudio] = useState(new Audio(dealSound));
-    // const [failAudio] = useState(new Audio(failSound));
     
     useEffect(() => {
         socket.on("dealcard", (args) => {
@@ -34,9 +32,6 @@ function OpenCard({socket}) {
             if(cards.point1 === 11 || cards.point1 === 10) {
                 winAudio.play();
             } 
-            // if(cards.point1 === 1) {
-            //     failAudio.play();
-            // }
             socket.emit("opencard");
             setCountOpened(0);
         }
@@ -45,7 +40,7 @@ function OpenCard({socket}) {
         <>
         {cards && <div className='opencards'>
             {cards?.cards?.map((card, index) => (
-                <FlipCard onFlip={handleCountOpened} key={index} card={card}/>
+                <FlipCard onFlip={handleCountOpened} key={index} card={card} time={(index + 5) * 1000}/>
             ))}
         </div>}
         </>

@@ -2,7 +2,8 @@
     position: absolute;
     & img {
         width: 32px;
-        margin: 2px;
+        margin: 0px -1px;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
     }
     z-index: 1;
     & span {
@@ -23,7 +24,7 @@
     .cards {
         & img {
             width: 20px;
-            margin: 2px;
+            margin: 0px -1px;
         }
 
         & span {

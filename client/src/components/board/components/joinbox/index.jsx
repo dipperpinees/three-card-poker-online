@@ -30,6 +30,7 @@ function JoinBox({index, onConnect}) {
             case 12: 
                 return {bottom: 108, left: -80}
             default:
+                return;
         }
     }
     const handlePosMobile = (index) => {
@@ -59,6 +60,7 @@ function JoinBox({index, onConnect}) {
             case 12: 
                 return {bottom: 42, left: -52}
             default:
+                return;
         }
     }
     const handlePos = (isMobile, pos) => {

@@ -13,11 +13,13 @@ function Cards({pos, cards, isMaster}) {
                 return isMaster ? {bottom: -70} : {bottom: -80}
             }
             case "left": {
-                return {left: -76, top: 12}
+                return {left: -64, top: 12}
             }
             case "right": {
-                return {right: -76, top: 12}
+                return {right: -64, top: 12}
             }
+            default:
+                return;
         }
     }
 
@@ -30,11 +32,13 @@ function Cards({pos, cards, isMaster}) {
                 return isMaster ? {bottom: -46} : {bottom: -50}
             }
             case "left": {
-                return {left: -56, top: 12}
+                return {left: -44, top: 12}
             }
             case "right": {
-                return {right: -56, top: 12}
+                return {right: -44, top: 12}
             }
+            default:
+                return;
         }
     }
 

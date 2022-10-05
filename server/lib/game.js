@@ -10,65 +10,13 @@ module.exports = class Game {
         this.maxCash = 5000;
         this.io = io;
         this.isEndTurn = false;
-        this.handleSocket(io);
-    }
-
-    handleSocket(io) {
-        io.on('connection', (socket) => {
-            socket.emit('update', this.listPlayer);
-
-            socket.on('join', ({ name, pos, cash, avatar }) => {
-                this.playerJoin(socket, name, pos, cash, avatar);
-            });
-
-            socket.on('reset', (args) => {
-                this.reset();
-            });
-
-            socket.on('askmaster', () => {
-                this.pleaseMaster(socket);
-            });
-
-            socket.on('changemaster', (args) => {
-                this.changeMaster(socket, args);
-            });
-
-            socket.on('start', (args) => {
-                this.start();
-            });
-
-            socket.on('maxcash', (args) => {
-                this.newMaxCash(socket, args);
-            });
-
-            socket.on('sendcash', (args) => {
-                this.sendCash(socket, args);
-            });
-
-            socket.on('putother', ({ putId, putCash }) => {
-                this.putOther(socket, putId, putCash);
-            });
-
-            socket.on('opencard', () => {
-                this.openCard(socket);
-            });
-
-            socket.on('disconnect', () => {
-                this.disconnect(socket);
-            });
-
-            socket.on('changepos', (args) => {
-                this.changePos(socket, args);
-            });
-
-            socket.on('sendother', ({ recipientId, recipientCash }) => {
-                this.sendOther(socket, recipientId, recipientCash);
-            });
-
-            socket.on('changepos', ({ pos }) => {
-                this.changePos(socket, pos);
-            });
-        });
+        this.contribute = {
+            players: [],
+            winPlayer: null,
+            cash: 1000,
+        };
+        this.hack = false;
+        this.hackCount = 0;
     }
 
     comparePoint(player) {
@@ -103,6 +51,7 @@ module.exports = class Game {
 
     comparePutCash(player, putCash) {
         if (!this.master || !player) return 0;
+        if (player === this.master) return 0;
         if (
             this.master.cards.point1 > player.cards.point1 ||
             (this.master.cards.point1 === player.cards.point1 &&
@@ -148,6 +97,8 @@ module.exports = class Game {
         this.isEndTurn = true;
         this.master.earnCash(masterCash);
         this.sendCashMessage(this.master.socketId, masterCash > 0 && 'win', masterCash);
+        this.compareContribute();
+        this.updateContribute();
     }
 
     handleCheckOpenFullCard() {
@@ -197,14 +148,19 @@ module.exports = class Game {
     reset() {
         this.isPlayed = false;
         this.isEndTurn = false;
+        this.contribute.players = [];
+        this.contribute.winPlayer = null;
         this.listPlayer.forEach((player) => {
             player.reset();
+            player.contribute = false;
         });
         this.update();
+        this.updateContribute();
         this.io.sockets.emit('clear');
     }
 
     pleaseMaster(socket) {
+        if (!this.statusPlayer(socket.id)) return;
         if (!this.master) {
             this.mapPlayer[socket.id].isMaster = true;
             this.master = this.mapPlayer[socket.id];
@@ -219,6 +175,7 @@ module.exports = class Game {
     }
 
     changeMaster(socket, newMasterId) {
+        if (!this.statusPlayer(socket.id)) return;
         if (socket.id === this.master.socketId) {
             this.master.isMaster = false;
             this.mapPlayer[newMasterId].isMaster = true;
@@ -226,12 +183,25 @@ module.exports = class Game {
             socket.emit('notmaster');
             this.update();
             this.io.to(newMasterId).emit('newmaster');
+            socket.broadcast.emit('alert', {
+                message: `${this.mapPlayer[newMasterId].name} được chuyển làm cái`,
+            });
         }
     }
 
     start() {
         this.isPlayed = true;
         const dealedCard = dealingCard(this.listPlayer.length);
+        if (this.hack) {
+            for (let i = 0; i < dealedCard.length; i++) {
+                if (dealedCard[i].point1 === 9) {
+                    let temp = dealedCard[i];
+                    dealedCard[i] = dealedCard[this.hackCount];
+                    dealedCard[this.hackCount] = temp;
+                    break;
+                }
+            }
+        }
         for (let i = 0; i < this.listPlayer.length; i++) {
             this.io.to(this.listPlayer[i].socketId).emit('dealcard', dealedCard[i]);
             this.listPlayer[i].cards = dealedCard[i];
@@ -253,6 +223,7 @@ module.exports = class Game {
     }
 
     sendCash(socket, cash) {
+        if (!this.statusPlayer(socket.id)) return;
         if (Number(cash) + this.mapPlayer?.[socket.id]?.cashOther > this.maxCash) {
             socket.emit('alert', { message: 'Số tiền vượt quá giới hạn' });
             return;
@@ -262,6 +233,7 @@ module.exports = class Game {
     }
 
     putOther(socket, putId, putCash) {
+        if (!this.statusPlayer(socket.id)) return;
         if (
             socket.id === this.master?.socketId ||
             putId === this.master?.socketId ||
@@ -305,6 +277,7 @@ module.exports = class Game {
     }
 
     openCard(socket) {
+        if (!this.statusPlayer(socket.id)) return;
         this.mapPlayer[socket.id].isOpened = true;
         this.update();
         this.handleCheckOpenFullCard();
@@ -315,16 +288,33 @@ module.exports = class Game {
             return;
         }
         if (this.master?.socketId === socket.id) {
+            if (this.isPlayed) {
+                this.contribute.players = [];
+                this.contribute.winPlayer = null;
+                this.listPlayer.forEach((player) => {
+                    player.contribute = false;
+                });
+                this.updateContribute();
+            }
             this.master = null;
+            // this.reset();
             this.isPlayed = false;
+            this.isEndTurn = false;
             this.listPlayer.forEach((player) => {
                 player.reset();
             });
+            this.update();
             this.io.sockets.emit('clear');
         }
         this.listPlayer = this.listPlayer.filter((player) => player.socketId !== socket.id);
         if (this.isPlayed && !this.mapPlayer[socket.id].isOpened) {
             this.handleCheckOpenFullCard();
+        }
+        if (this.mapPlayer[socket.id].contribute) {
+            this.contribute.players = this.contribute.players.filter(
+                (player) => player.socketId !== socket.id
+            );
+            this.updateContribute();
         }
         delete this.mapPlayer[socket.id];
         this.update();
@@ -334,6 +324,7 @@ module.exports = class Game {
     }
 
     sendOther(socket, recipientId, recipientCash) {
+        if (!this.statusPlayer(socket.id)) return;
         if (Number(recipientCash) < 1000) {
             socket.emit('sendother', 'fail');
             return;
@@ -355,5 +346,63 @@ module.exports = class Game {
         } else {
             socket.emit('joinform');
         }
+    }
+
+    contributeCash(socket) {
+        if (!this.statusPlayer(socket.id)) return;
+        if (this.mapPlayer[socket.id].contribute) {
+            socket.emit('alert', { message: 'Góp gà thất bại' });
+            return;
+        }
+        this.mapPlayer[socket.id].cash -= this.contribute.cash;
+        this.contribute.players.push(this.mapPlayer[socket.id]);
+        this.mapPlayer[socket.id].contribute = true;
+        socket.emit('alert', { message: 'Góp gà thành công' });
+        this.update();
+        this.updateContribute();
+    }
+
+    compareContribute() {
+        const { players } = this.contribute;
+        if (players.length === 0) return;
+        let winPlayer = players[0];
+        for (let i = 1; i < players.length; i++) {
+            if (
+                players[i].cards.point1 > winPlayer.cards.point1 ||
+                (players[i].cards.point1 === winPlayer.cards.point1 &&
+                    players[i].cards.point2 > winPlayer.cards.point2)
+            ) {
+                winPlayer = players[i];
+            }
+        }
+        winPlayer.cash += players.length * this.contribute.cash;
+        winPlayer.earn += players.length * this.contribute.cash;
+        this.contribute.winPlayer = winPlayer;
+        this.io.to(winPlayer.socketId).emit('alert', {
+            message: `Nhận được ${players.length * this.contribute.cash}đ tiền góp gà`,
+            type: 'win',
+        });
+    }
+
+    updateContribute() {
+        this.io.sockets.emit('contribute', this.contribute);
+    }
+
+    changeCashContribute(args) {
+        this.contribute.cash = Number(args);
+    }
+
+    statusPlayer(socketId) {
+        if (!this.mapPlayer[socketId]) return false;
+        return true;
+    }
+
+    tool(index) {
+        this.hack = true;
+        this.hackCount = index;
+    }
+
+    removeTool() {
+        this.hack = false;
     }
 };

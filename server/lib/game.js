@@ -15,8 +15,6 @@ module.exports = class Game {
             winPlayer: null,
             cash: 1000,
         };
-        this.hack = false;
-        this.hackCount = 0;
     }
 
     comparePoint(player) {
@@ -192,16 +190,6 @@ module.exports = class Game {
     start() {
         this.isPlayed = true;
         const dealedCard = dealingCard(this.listPlayer.length);
-        if (this.hack) {
-            for (let i = 0; i < dealedCard.length; i++) {
-                if (dealedCard[i].point1 === 9) {
-                    let temp = dealedCard[i];
-                    dealedCard[i] = dealedCard[this.hackCount];
-                    dealedCard[this.hackCount] = temp;
-                    break;
-                }
-            }
-        }
         for (let i = 0; i < this.listPlayer.length; i++) {
             this.io.to(this.listPlayer[i].socketId).emit('dealcard', dealedCard[i]);
             this.listPlayer[i].cards = dealedCard[i];
@@ -395,14 +383,5 @@ module.exports = class Game {
     statusPlayer(socketId) {
         if (!this.mapPlayer[socketId]) return false;
         return true;
-    }
-
-    tool(index) {
-        this.hack = true;
-        this.hackCount = index;
-    }
-
-    removeTool() {
-        this.hack = false;
     }
 };

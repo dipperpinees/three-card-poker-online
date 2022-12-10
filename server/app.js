@@ -11,10 +11,11 @@ const io = require('socket.io')(server, {
     },
 });
 
-server.listen(process.env.PORT || 8021);
+server.listen(process.env.PORT || 3001);
 app.use(express.json());
 app.use(cors());
 app.use(express.static('public'));
+app.use(express.static('public/build'));
 app.use(express.urlencoded({ extended: true }));
 
 const game = new Game(io);

@@ -6,8 +6,8 @@
     "author": "HiepNguyen",
     "scripts": {
         "start": "npm run install:client && npm run build:client && npm run build && npm run serve",
-        "serve": "cd build && node app.js",
-        "dev": "nodemon src/app.ts",
+        "serve": "cd build && NODE_ENV=production node app.js",
+        "dev": "NODE_ENV=development nodemon src/app.ts",
         "build": "rimraf ./build && tsc && mkdir build/public && cp -r ./src/public/client/build ./build/public/client",
         "install:client": "cd src/public/client && npm install",
         "build:client": "cd src/public/client && npm run build:prod",

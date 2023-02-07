@@ -13,7 +13,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new socketio.Server(server, {
     maxHttpBufferSize: 4e6,
-    ...(process.env.ENV === 'development' && {
+    ...(process.env.NODE_ENV === 'development' && {
         cors: {
             origin: '*',
         },
@@ -24,7 +24,7 @@ server.listen(process.env.PORT || 3001);
 app.use(express.json());
 app.use(cors());
 app.use(express.static('public'));
-process.env.ENV === 'production' && app.use(express.static('public/client'));
+process.env.NODE_ENV === 'production' && app.use(express.static('public/client'));
 app.use(express.urlencoded({ extended: true }));
 app.use(router);
 

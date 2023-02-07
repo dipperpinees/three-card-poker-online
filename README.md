@@ -5,6 +5,15 @@
 
 `yarn start` to run app locally
 
+## Functionality overview
+
+**General functionality:**
+- Join the room without login account
+- Deal a random poker hand from a standard card deck
+- Bet money on other players
+- Contribute money together
+- Transfer money to other players
+
 Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
 
 <p>

@@ -8,7 +8,7 @@
 ## Functionality overview
 
 **General functionality:**
-- Join the room without login account
+- join the game with up to 12 players
 - Deal a random poker hand from a standard card deck
 - Bet money on other players
 - Contribute money together

@@ -8,5 +8,5 @@
 Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
 
 <p>
-  <img src="https://i.ibb.co/YX1w40F/Screenshot-from-2022-12-10-16-51-52.png"/>
+  <img src="https://res.cloudinary.com/uethehe/image/upload/w_1500/v1675775558/Screenshot-from-2022-12-10-16-51-52_ub4v6h.png"/>
 </p>

@@ -9,7 +9,7 @@
         "serve": "cd build && node app.js",
         "dev": "nodemon src/app.ts",
         "build": "rimraf ./build && tsc && mkdir build/public && cp -r ./src/public/client/build ./build/public/client",
-        "install:client": "cd src/public/client && npm run install",
+        "install:client": "cd src/public/client && npm install",
         "build:client": "cd src/public/client && npm run build:prod",
         "format": "prettier '**/*.{js,ts,mjs,cjs,json,css,scss}' --write"
     },

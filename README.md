@@ -1,9 +1,11 @@
 ### <a href="https://threecayserver.onrender.com/">DEMO</a>
 
 ## How to start
-`docker-compose up` to run app locally
+`yarn install` to install packages
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser (back-end running on port 8021).
+`yarn start` to run app locally
+
+Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
 
 <p>
   <img src="https://i.ibb.co/YX1w40F/Screenshot-from-2022-12-10-16-51-52.png"/>

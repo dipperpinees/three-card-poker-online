@@ -1,0 +1,78 @@
+.joinform {
+    &-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 8px 16px;
+        background-color: white;
+        border: 1px solid #000;
+        border-radius: 8px;
+        z-index: 11;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        & input {
+            width: 240px;
+            border: 0.5px solid #ccc;
+            border-radius: 4px;
+            padding: 16px 8px;
+        }
+
+        & > div {
+            & label {
+                font-size: 12px;
+                font-weight: 500;
+            }
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 8px;
+        }
+
+        &-avatar {
+            width: 200px;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            position: relative;
+            &:hover {
+                & svg {
+                    display: block;
+                }
+                cursor: pointer;
+            }
+            & img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                &:hover {
+                    opacity: 0.9;
+                }
+            }
+
+            & svg {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: white;
+                font-size: 28px;
+                display: none;
+            }
+        }
+    }
+}
+
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    cursor: pointer;
+}

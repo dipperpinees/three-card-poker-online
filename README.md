@@ -1,4 +1,4 @@
-### <a href="https://threecayserver.onrender.com/">DEMO</a>
+### <a href="https://three-card-poker.onrender.com">DEMO</a>
 
 ## How to start
 `yarn install` to install packages

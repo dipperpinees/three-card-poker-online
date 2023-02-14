@@ -10,7 +10,7 @@ Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
 ## Functionality overview
 
 **General functionality:**
-- join the game with up to 12 players
+- Join the game with up to 12 players
 - Deal a random poker hand from a standard card deck
 - Bet money on other players
 - Contribute money together

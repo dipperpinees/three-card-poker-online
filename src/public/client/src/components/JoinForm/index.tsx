@@ -1,5 +1,6 @@
 import React, { FormEvent, useRef, useState } from 'react';
 import { FcAddImage } from 'react-icons/fc';
+import { API_ENDPOINT } from '../../config';
 import { DEFAULT_AVATAR } from '../../helper/constant';
 import './styles.scss';
 
@@ -27,12 +28,12 @@ function JoinForm({ onConnect, onClose }: Props) {
         if (avatar.files[0]) {
             const formData = new FormData();
             formData.append('avatar', avatar.files[0]);
-            const response = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/avatar`, {
+            const response = await fetch(`${API_ENDPOINT}/avatar`, {
                 method: 'post',
                 body: formData,
             });
             const responseJSON = await response.json();
-            const avatarUrl = `${process.env.REACT_APP_API_ENDPOINT}/${responseJSON.avatar}`;
+            const avatarUrl = `${API_ENDPOINT}/${responseJSON.avatar}`;
             localStorage.setItem('avatar', avatarUrl);
             onConnect(name.value, avatarUrl);
             return;

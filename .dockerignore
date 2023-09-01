@@ -1,3 +1,7 @@
 node_modules/
-build/
-.env.example
+
+api/node_modules/
+api/dist/
+
+web/node_modules/
+web/build/

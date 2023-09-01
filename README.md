@@ -4,11 +4,32 @@
 ## Getting Started
 To get started, clone this repository to your local machine and run the following commands:
 
-`yarn install` to install packages
+Build the Docker image:
+```bash
+$ docker build -t three-card-poker .
+```
+or use my docker Image from Docker Hub
+```bash 
+$ docker pull dipperpinees/three-card-poker
+$ docker tag dipperpinees/three-card-poker three-card-poker
+```
 
-`yarn start` to run app locally
+Run the application in a Docker container:
+```bash
+$ docker run -d --name three-card-poker-online -p 7001:7001 three-card-poker
+```
 
-Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
+Open [http://localhost:7001](http://localhost:7001) to view it in the browser.
+
+## Development
+Run api in development mode:
+```bash
+$ npm run dev:api
+```
+Run frontend in development mode:
+```bash
+$ npm run dev:web
+```
 
 ## Functionality overview
 
@@ -16,8 +37,7 @@ Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
 - Join the game with up to 12 players
 - Deal a random poker hand from a standard card deck
 - Bet money on other players
-- Contribute money together
-- Transfer money to other players
+- Contribute cash together
 
 <p>
   <img src="https://res.cloudinary.com/uethehe/image/upload/w_1500/v1675775558/Screenshot-from-2022-12-10-16-51-52_ub4v6h.png"/>

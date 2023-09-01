@@ -1,35 +1,20 @@
 {
-    "name": "ba-cay-online",
-    "version": "1.1.2",
-    "main": "app.ts",
+    "name": "three-card-poker-online",
+    "version": "1.0.0",
+    "repository": "git@github.com:dipperpinees/three-card-poker-online.git",
+    "author": "hiepnguyen223 <hiepnguyenn223@gmail.com>",
     "license": "MIT",
-    "author": "HiepNguyen",
     "scripts": {
-        "start": "npm run install:client && npm run build:client && npm run build && npm run serve",
-        "serve": "cd build && NODE_ENV=production node app.js",
-        "dev": "NODE_ENV=development nodemon src/app.ts",
-        "build": "rimraf ./build && tsc && mkdir build/public && cp -r ./src/public/client/build ./build/public/client",
-        "install:client": "cd src/public/client && npm install --force",
-        "build:client": "cd src/public/client && npm run build:prod",
-        "format": "prettier '**/*.{js,ts,mjs,cjs,json,css,scss}' --write"
-    },
-    "dependencies": {
-        "cors": "^2.8.5",
-        "dotenv": "^16.0.0",
-        "ejs": "^3.1.6",
-        "express": "^4.17.3",
-        "multer": "^1.4.4",
-        "nodemon": "^2.0.15",
-        "prettier": "^2.8.3",
-        "socket.io": "^4.4.1",
-        "ts-node": "^10.9.1"
+        "postinstall": "node ./bin/install.js",
+        "format": "prettier '**/*.{js,ts,mjs,cjs,json,css,scss,jsx,tsx}' --write",
+        "dev:api": "npm run dev --prefix api",
+        "dev:web": "npm run start --prefix web",
+        "build:web": "npm run build --prefix web",
+        "build:api": "npm run build --prefix api",
+        "build": "npm run build:web && npm run build:api",
+        "start:prod": "npm run start --prefix api"
     },
     "devDependencies": {
-        "@types/cors": "^2.8.13",
-        "@types/express": "^4.17.17",
-        "@types/multer": "^1.4.7",
-        "@types/node": "^18.11.19",
-        "rimraf": "^4.1.2",
-        "typescript": "^4.9.5"
+        "prettier": "^3.0.3"
     }
 }

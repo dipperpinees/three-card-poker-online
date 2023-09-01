@@ -1,4 +1,9 @@
 node_modules/
-.env
-build/
 
+api/node_modules/
+api/dist/
+api/.env
+
+web/node_modules/
+web/build/
+web/.env

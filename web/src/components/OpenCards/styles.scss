@@ -1,0 +1,26 @@
+.opencards {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    display: flex;
+    & img {
+        width: 80px;
+        margin: 4px;
+        box-shadow:
+            0 1px 6px rgba(0, 0, 0, 0.12),
+            0 1px 4px rgba(0, 0, 0, 0.24);
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+@media (max-width: 1000px) {
+    .opencards {
+        & img {
+            width: 40px;
+        }
+    }
+}

@@ -1,7 +1,7 @@
 node_modules/
 
-api/node_modules/
-api/dist/
+apps/api/dist/
 
-web/node_modules/
-web/build/
+apps/web/build/
+
+.turbo

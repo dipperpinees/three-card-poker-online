@@ -1,13 +1,13 @@
-FROM node:18-alpine3.17
+FROM node:20-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY . .
 
-RUN yarn
+RUN npm install
 
-RUN yarn build
+RUN npm run build
 
 EXPOSE 7001
 
-CMD [ "yarn", "start:prod" ]
+CMD [ "npm", "run", "start" ]

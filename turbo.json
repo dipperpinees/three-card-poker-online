@@ -1,0 +1,20 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "env": ["API_PORT", "REACT_APP_API_ENDPOINT"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": ["API_PORT", "REACT_APP_API_ENDPOINT"]
+    },
+    "start": {
+      "env": ["API_PORT", "REACT_APP_API_ENDPOINT"]
+    },
+    "clean": {
+      "cache": false
+    }
+  },
+  "globalDependencies": [".env"]
+}

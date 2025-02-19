@@ -4,17 +4,22 @@
     "repository": "git@github.com:dipperpinees/three-card-poker-online.git",
     "author": "hiepnguyen223 <hiepnguyenn223@gmail.com>",
     "license": "MIT",
+    "private": "true",
+    "workspaces": [
+        "apps/*"
+    ],
     "scripts": {
-        "postinstall": "node ./bin/install.js",
         "format": "prettier '**/*.{js,ts,mjs,cjs,json,css,scss,jsx,tsx}' --write",
-        "dev:api": "npm run dev --prefix api",
-        "dev:web": "npm run start --prefix web",
-        "build:web": "npm run build --prefix web",
-        "build:api": "npm run build --prefix api",
-        "build": "npm run build:web && npm run build:api",
-        "start:prod": "npm run start --prefix api"
+        "build": "dotenv -- turbo run build",
+        "start": "dotenv -- turbo run api#start",
+        "dev": "dotenv -- turbo run dev --parallel"
     },
     "devDependencies": {
-        "prettier": "^3.0.3"
-    }
+        "prettier": "^3.0.3",
+        "turbo": "^2.4.2"
+    },
+    "dependencies": {
+        "dotenv-cli": "^8.0.0"
+    },
+    "packageManager": "^npm@10.2.3"
 }

@@ -1,9 +1,9 @@
 node_modules/
 
-api/node_modules/
-api/dist/
-api/.env
+apps/api/dist/
 
-web/node_modules/
-web/build/
-web/.env
+apps/web/build/
+
+.turbo
+
+.env

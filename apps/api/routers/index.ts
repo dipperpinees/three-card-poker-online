@@ -1,7 +1,7 @@
-import express from 'express';
+import express, { Router } from 'express';
 import upload from '../lib/multer';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 router.post('/avatar', upload.single('avatar'), (req, res) => {
     const file = req.file;
